@@ -6,7 +6,25 @@
 </head>
 <body>
     <h1>Каталог товаров</h1>
+
+    <div class="product-list">
+    {% for product in products %}
+        <div class="product">
+            <h2>{{ product.name }}</h2>
+            <p>{{ product.description }}</p>
+            <p>Цена: {{ product.price }}</p>
+            <p>В наличии: {{ product.quantity_in_stock }}</p>
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+            {% else %}
+                <p>Изображение отсутствует</p>
+            {% endif %}
+        </div>
+    {% endfor %}
+</div>
+
     <p>Скоро здесь появятся все доступные материалы.</p>
     <a href="{% url 'home' %}">На главную</a>
 </body>
 </html>
+

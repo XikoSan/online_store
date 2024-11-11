@@ -1,16 +1,15 @@
 from django.shortcuts import render
+from .models import Product
 
 
-# Home page
 def home(request):
     return render(request, "product_views/home.html")
 
 
-# Catalog page
 def catalog(request):
-    return render(request, "product_views/catalog.html")
+    products = Product.objects.all()  # Получаем все продукты из базы данных
+    return render(request, "product_views/catalog.html", {"products": products})
 
 
-# Company page
 def about(request):
     return render(request, "product_views/about.html")
