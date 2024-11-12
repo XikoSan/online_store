@@ -5,21 +5,28 @@
     <title>Catalog</title>
 </head>
 <body>
-    <h1>Каталог товаров</h1>
 
-    <div class="product-list">
+<form method="get" class="price-filter-form">
+    <label for="{{ form.min_price.id }}">Мин. цена:</label>
+    {{ form.min_price }}
+
+    <label for="{{ form.max_price.id }}">Макс. цена:</label>
+    {{ form.max_price }}
+
+    <button type="submit">Применить фильтр</button>
+</form>
+
+<h1>Каталог товаров</h1>
+<div>
     {% for product in products %}
-        <div class="product">
-            <h2>{{ product.name }}</h2>
+        <div>
+            <h3>{{ product.name }}</h3>
             <p>{{ product.description }}</p>
             <p>Цена: {{ product.price }}</p>
-            <p>В наличии: {{ product.quantity_in_stock }}</p>
-            {% if product.image %}
-                <img src="{{ product.image.url }}" alt="{{ product.name }}">
-            {% else %}
-                <p>Изображение отсутствует</p>
-            {% endif %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}">
         </div>
+    {% empty %}
+        <p>Товары не найдены.</p>
     {% endfor %}
 </div>
 
