@@ -1,47 +1,58 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Catalog</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
+    <header>
+        <img src="{% static 'images/logo.png' %}" alt="Логотип">
+    </header>
 
-<form method="get" class="price-filter-form">
-    <label for="id_min_price">Мин. цена:</label>
-    {{ form.min_price }}
+    <form method="get" class="price-filter-form">
+        <label for="id_min_price">Мин. цена:</label>
+        {{ form.min_price }}
 
-    <label for="id_max_price">Макс. цена:</label>
-    {{ form.max_price }}
+        <label for="id_max_price">Макс. цена:</label>
+        {{ form.max_price }}
 
-    <label for="category">Категория:</label>
-    <select name="category" id="category">
-        <option value="">Все категории</option>
-        {% for category in categories %}
-            <option value="{{ category.id }}" {% if request.GET.category|default_if_none:'' == category.id|stringformat:"s" %}>
-                {{ category.name }}
-            </option>
+        <label for="category">Категория:</label>
+        <select name="category" id="category">
+            <option value="">Все категории</option>
+            {% for category in categories %}
+                <option value="{{ category.id }}"
+                    {% if request.GET.category == category.id|stringformat:"s" %}
+                        selected
+                    {% endif %}
+                >
+                    {{ category.name }}
+                </option>
+            {% endfor %}
+
+        </select>
+
+        <button type="submit">Применить фильтр</button>
+    </form>
+
+    <h1>Каталог товаров</h1>
+    <div>
+        {% for product in products %}
+            <div>
+                <h3>{{ product.name }}</h3>
+                <p>{{ product.description }}</p>
+                <p>Цена: {{ product.price }}</p>
+                {% if product.image %}
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                {% endif %}
+            </div>
+        {% empty %}
+            <p>Товары не найдены.</p>
         {% endfor %}
-    </select>
+    </div>
 
-    <button type="submit">Применить фильтр</button>
-</form>
-
-<h1>Каталог товаров</h1>
-<div>
-    {% for product in products %}
-        <div>
-            <h3>{{ product.name }}</h3>
-            <p>{{ product.description }}</p>
-            <p>Цена: {{ product.price }}</p>
-            {% if product.image %}
-                <img src="{{ product.image.url }}" alt="{{ product.name }}">
-            {% endif %}
-        </div>
-    {% empty %}
-        <p>Товары не найдены.</p>
-    {% endfor %}
-</div>
-
-<a href="{% url 'home' %}">На главную</a>
+    <a href="{% url 'home' %}">На главную</a>
 </body>
 </html>
