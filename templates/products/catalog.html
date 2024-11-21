@@ -1,6 +1,7 @@
+<!DOCTYPE html>
+
 {% load static %}
 
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -9,19 +10,21 @@
 </head>
 <body>
     <header>
-        <img src="{% static 'images/logo.png' %}" alt="Логотип">
+        <img src="{% static 'images/logo2.jpg' %}" alt="Логотип">
     </header>
 
+    <!-- Фильтрация по цене -->
     <form method="get" class="price-filter-form">
-        <label for="id_min_price">Мин. цена:</label>
+        <label for="id_min_price">Min. price:</label>
         {{ form.min_price }}
 
-        <label for="id_max_price">Макс. цена:</label>
+        <label for="id_max_price">Max. price:</label>
         {{ form.max_price }}
 
-        <label for="category">Категория:</label>
+        <!-- Фильтрация по категориям -->
+        <label for="category">Category:</label>
         <select name="category" id="category">
-            <option value="">Все категории</option>
+            <option value="">All category</option>
             {% for category in categories %}
                 <option value="{{ category.id }}"
                     {% if request.GET.category == category.id|stringformat:"s" %}
@@ -31,28 +34,26 @@
                     {{ category.name }}
                 </option>
             {% endfor %}
-
         </select>
 
-        <button type="submit">Применить фильтр</button>
+        <button type="submit">Apply filter</button>
     </form>
 
-    <h1>Каталог товаров</h1>
-    <div>
+    <h1>Product Catalog</h1>
+    <div class="product-list">
         {% for product in products %}
-            <div>
+            <div class="product-card">
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
                 <h3>{{ product.name }}</h3>
                 <p>{{ product.description }}</p>
-                <p>Цена: {{ product.price }}</p>
-                {% if product.image %}
-                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
-                {% endif %}
+                <p class="price">Цена: {{ product.price }}</p>
+                <button class="add-to-cart">Add to cart</button>
             </div>
         {% empty %}
-            <p>Товары не найдены.</p>
+            <p>No products found.</p>
         {% endfor %}
     </div>
 
-    <a href="{% url 'home' %}">На главную</a>
+    <a href="{% url 'home' %}">To the main page</a>
 </body>
 </html>
