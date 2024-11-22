@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from .models import Product, Category
 from .forms import PriceFilterFrom, ProductFilterForm
+from django.core.paginator import Paginator
 
 
 def home(request):
@@ -26,19 +27,21 @@ def catalog(request):
         if max_price:
             products = products.filter(price__lte=max_price)
 
-    # Filters of product
-    product_form = ProductFilterForm(request.GET)
+    paginator = Paginator(products, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        'categories': categories,
+        'form': form,
+        'page_obj': page_obj,
+    }
 
     print("Products:", products)
     print("Categories:", categories)
     print("Form errors:", form.errors if not form.is_valid() else "No errors")
 
-    return render(request, 'products/catalog.html', {
-        'products': products,
-        'categories': categories,
-        'form': product_form,
-        'product_form': product_form,
-    })
+    return render(request, 'products/catalog.html', context)
 
 
 def about(request):
