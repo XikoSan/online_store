@@ -8,6 +8,12 @@ def home(request):
     return render(request, "product_views/home.html")
 
 
+def search(request):
+    query = request.GET.get('q', '')
+    results = Product.objects.filter(name__icontains=query)
+    return render(request, 'products/search_results.html', {'query': query, 'results': results})
+
+
 def catalog(request):
     products = Product.objects.all()  # Get all products from the database
     categories = Category.objects.all()  # Get all categories from the database
@@ -28,6 +34,9 @@ def catalog(request):
         if max_price:
             products = products.filter(price__lte=max_price)
 
+        else:
+            form_errors = form.errors
+
     # Pagination output
     paginator = Paginator(products, 10)
     page_number = request.GET.get('page')
@@ -47,11 +56,21 @@ def catalog(request):
     return render(request, 'products/catalog.html', context)
 
 
+def category_view(request, category_id):
+    category = get_object_or_404(Category, id=category_id)
+    products = Product.objects.filter(category=category)
+    return render(request, 'products/category.html', {'category': category, 'products': products})
+
+
+def cart_view(request):
+    return render(request, 'cart_view.html')
+
+
+def account_view(request):
+    return render(request, 'account.html')
+
+
 def product_detail(request, product_id):
     product = get_object_or_404(Product, id=product_id)
 
     return render(request, 'products/product_detail.html', {'product': product})
-
-
-def about(request):
-    return render(request, "product_views/about.html")
