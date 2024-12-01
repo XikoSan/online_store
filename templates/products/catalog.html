@@ -1,16 +1,17 @@
 {% extends 'base.html' %}
 
-{% block title %}Каталог товаров{% endblock %}
+{% block title %}Product Catalog{% endblock %}
 
 {% block content %}
     <div class="catalog-container">
         <aside class="filters">
             <form method="get" class="filter-form">
-                <h2>Фильтры</h2>
+                <h2>Filters</h2>
                 <label for="id_min_price">Min. price:</label>
                 {{ form.min_price }}
                 <label for="id_max_price">Max price:</label>
                 {{ form.max_price }}
+
                 <h3>Categories</h3>
                 <div id="categories">
                     {% for category in categories %}
@@ -49,7 +50,7 @@
         <a href="?page=1" class="btn">First</a>
         <a href="?page={{ page_obj.previous_page_number }}" class="btn">Previous</a>
         {% endif %}
-        <span>Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</span>
+        <span>Page {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</span>
         {% if page_obj.has_next %}
         <a href="?page={{ page_obj.next_page_number }}" class="btn">Next</a>
         <a href="?page={{ page_obj.paginator.num_pages }}" class="btn">The last one</a>

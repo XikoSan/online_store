@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Product, Category
-from .forms import PriceFilterFrom, ProductFilterForm
+from .forms import PriceFilterFrom
 from django.core.paginator import Paginator
 
 
@@ -10,7 +10,7 @@ def home(request):
 
 def search(request):
     query = request.GET.get('q', '')
-    results = Product.objects.filter(name__icontains=query)
+    results = Product.objects.filter(name__icontains=query) if query else []
     return render(request, 'products/search_results.html', {'query': query, 'results': results})
 
 
@@ -33,9 +33,6 @@ def catalog(request):
             products = products.filter(price__gte=min_price)
         if max_price:
             products = products.filter(price__lte=max_price)
-
-        else:
-            form_errors = form.errors
 
     # Pagination output
     paginator = Paginator(products, 10)
@@ -64,10 +61,6 @@ def category_view(request, category_id):
 
 def cart_view(request):
     return render(request, 'cart_view.html')
-
-
-def account_view(request):
-    return render(request, 'account.html')
 
 
 def product_detail(request, product_id):
